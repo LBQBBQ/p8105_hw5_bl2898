@@ -105,7 +105,6 @@ files <- list.files(path = "data/")
 
 file_data <- list.files(path = "data/") %>% map_df(read_csv)
 
-
 combine_data <- cbind(files, file_data)
 
 
@@ -114,7 +113,7 @@ tidy <- combine_data %>% pivot_longer(week_1:week_8,
                                  values_to = "value")
 
 
-tidy$group <- rep(c("control","exposure"), each=80)
+tidy$group <- rep(c("control","exposure"), each = 80)
 tidy$week2 <- rep(1:8, 20)
 
 library(ggplot2)
