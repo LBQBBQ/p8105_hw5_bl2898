@@ -98,12 +98,28 @@ nested_df %>%
 ## Problem 2
 
 ```{r}
-seperate_files = list.files(path = "data/") 
-data = data_frame(files = files) %>% 
-  mutate(file_contents = map(files, ~read_csv(file.path("data/")))) %>% 
-  unnest() %>% 
-  pivot_longer(week_1:week_8, names_to = "week")
-values_to = "measurement") %>% 
+library(purrr)
+library(tidyverse)
+
+files <- list.files(path = "data/")
+
+file_data <- list.files(path = "data/") %>% map_df(read_csv)
+
+
+combine_data <- cbind(files, file_data)
+
+
+tidy <- combine_data %>% pivot_longer(week_1:week_8,
+                                 names_to = "week", 
+                                 values_to = "value")
+
+
+tidy$group <- rep(c("control","exposure"), each=80)
+tidy$week2 <- rep(1:8, 20)
+
+library(ggplot2)
+ggplot(tidy) + aes(x = week2, y = value, color = files) + geom_line() + geom_point()
+ggplot(tidy) + aes(x = week2, y = value, color = group) + geom_path() + geom_point()
 ```
 ## Problem 3 
 ```{r}
